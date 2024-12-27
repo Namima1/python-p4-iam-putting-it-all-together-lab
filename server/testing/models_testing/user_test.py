@@ -9,9 +9,8 @@ class TestUser:
 
     def test_has_attributes(self):
         '''has attributes username, _password_hash, image_url, and bio.'''
-        
-        with app.app_context():
 
+        with app.app_context():
             User.query.delete()
             db.session.commit()
 
@@ -19,40 +18,23 @@ class TestUser:
                 username="Liz",
                 image_url="https://prod-images.tcm.com/Master-Profile-Images/ElizabethTaylor.jpg",
                 bio="""Dame Elizabeth Rosemond Taylor DBE (February 27, 1932""" + \
-                    """ - March 23, 2011) was a British-American actress. """ + \
-                    """She began her career as a child actress in the early""" + \
-                    """ 1940s and was one of the most popular stars of """ + \
-                    """classical Hollywood cinema in the 1950s. She then""" + \
-                    """ became the world's highest paid movie star in the """ + \
-                    """1960s, remaining a well-known public figure for the """ + \
-                    """rest of her life. In 1999, the American Film Institute""" + \
-                    """ named her the seventh-greatest female screen legend """ + \
-                    """of Classic Hollywood cinema."""
+                        """ - March 23, 2011) was a British-American actress."""
             )
-
-            user.password_hash = "whosafraidofvirginiawoolf"
-            
+            user.password = "whosafraidofvirginiawoolf"  # Use password setter
             db.session.add(user)
             db.session.commit()
 
             created_user = User.query.filter(User.username == "Liz").first()
 
-            assert(created_user.username == "Liz")
-            assert(created_user.image_url == "https://prod-images.tcm.com/Master-Profile-Images/ElizabethTaylor.jpg")
-            assert(created_user.bio == \
-                """Dame Elizabeth Rosemond Taylor DBE (February 27, 1932""" + \
-                """ - March 23, 2011) was a British-American actress. """ + \
-                """She began her career as a child actress in the early""" + \
-                """ 1940s and was one of the most popular stars of """ + \
-                """classical Hollywood cinema in the 1950s. She then""" + \
-                """ became the world's highest paid movie star in the """ + \
-                """1960s, remaining a well-known public figure for the """ + \
-                """rest of her life. In 1999, the American Film Institute""" + \
-                """ named her the seventh-greatest female screen legend """ + \
-                """of Classic Hollywood cinema.""")
-            
+            assert created_user.username == "Liz"
+            assert created_user.image_url == "https://prod-images.tcm.com/Master-Profile-Images/ElizabethTaylor.jpg"
+            assert created_user.bio == """Dame Elizabeth Rosemond Taylor DBE (February 27, 1932""" + \
+                """ - March 23, 2011) was a British-American actress."""
+
+            # Ensure password_hash raises AttributeError
             with pytest.raises(AttributeError):
                 created_user.password_hash
+
 
     def test_requires_username(self):
         '''requires each record to have a username.'''
@@ -107,11 +89,11 @@ class TestUser:
             recipe_2 = Recipe(
                 title="Hasty Party Ham",
                 instructions="""As am hastily invited settled at limited""" + \
-                             """ civilly fortune me. Really spring in extent""" + \
-                             """ an by. Judge but built gay party world. Of""" + \
-                             """ so am he remember although required. Bachelor""" + \
-                             """ unpacked be advanced at. Confined in declared""" + \
-                             """ marianne is vicinity.""",
+                                """ civilly fortune me. Really spring in extent""" + \
+                                """ an by. Judge but built gay party world. Of""" + \
+                                """ so am he remember although required. Bachelor""" + \
+                                """ unpacked be advanced at. Confined in declared""" + \
+                                """ marianne is vicinity.""",
                 minutes_to_complete=30,
                 )
 
